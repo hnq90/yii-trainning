@@ -5,12 +5,12 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Receipt;
+use backend\models\Category;
 
 /**
- * ReceiptSearch represents the model behind the search form about `backend\models\Receipt`.
+ * CategorySearch represents the model behind the search form about `backend\models\Category`.
  */
-class ReceiptSearch extends Receipt
+class CategorySearch extends Category
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class ReceiptSearch extends Receipt
     public function rules()
     {
         return [
-            [['id', 'price', 'user_id'], 'integer'],
-            [['name'], 'safe'],
+            [['id'], 'integer'],
+            [['title'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class ReceiptSearch extends Receipt
      */
     public function search($params)
     {
-        $query = Receipt::find();
+        $query = Category::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -52,11 +52,10 @@ class ReceiptSearch extends Receipt
         }
 
         $query->andFilterWhere([
-            'price' => $this->price,
-            'user_id' => $this->user_id,
+            'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'title', $this->title]);
 
         return $dataProvider;
     }

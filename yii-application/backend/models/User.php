@@ -18,7 +18,7 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord extends IdentityInterface
 {
     /**
      * @inheritdoc

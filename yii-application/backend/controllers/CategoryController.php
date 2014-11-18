@@ -4,16 +4,16 @@ namespace backend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use backend\models\Receipt;
-use backend\models\ReceiptSearch;
+use backend\models\Category;
+use backend\models\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ReceiptController implements the CRUD actions for Receipt model.
+ * CategoryController implements the CRUD actions for Category model.
  */
-class ReceiptController extends Controller
+class CategoryController extends Controller
 {
     public function behaviors()
     {
@@ -21,12 +21,15 @@ class ReceiptController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
+                    // ?: matches a guest user (not authenticated yet)
+                    // @: matches an authenticated user
                     [
                         'actions' => ['index'],
                         'allow' => true,
                     ],
+                    // For authenticated user
                     [
-                        'actions' => ['view', 'create', 'update', 'delete'],
+                        'actions' => ['create', 'view', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -46,12 +49,12 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Lists all Receipt models.
+     * Lists all Category models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ReceiptSearch();
+        $searchModel = new CategorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -61,7 +64,7 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Displays a single Receipt model.
+     * Displays a single Category model.
      * @param integer $id
      * @return mixed
      */
@@ -73,21 +76,16 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Creates a new Receipt model.
+     * Creates a new Category model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Receipt();
+        $model = new Category();
 
-        if (Yii::$app->request->getIsPost()) {
-          $userId = Yii::$app->backend->currentUser()->id;
-          $model->load(Yii::$app->request->post());
-          $model->setAttribute('user_id', $userId);
-          $model->save();
-
-          return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -96,7 +94,7 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Updates an existing Receipt model.
+     * Updates an existing Category model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -115,7 +113,7 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Deletes an existing Receipt model.
+     * Deletes an existing Category model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -128,15 +126,15 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Finds the Receipt model based on its primary key value.
+     * Finds the Category model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Receipt the loaded model
+     * @return Category the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Receipt::findOne($id)) !== null && $model->getAttribute('user_id') === Yii::$app->backend->currentUser()->id) {
+        if (($model = Category::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

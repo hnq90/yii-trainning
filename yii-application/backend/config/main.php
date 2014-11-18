@@ -26,8 +26,13 @@ return [
                 ],
             ],
         ],
+        // Enable pretty url (rewrite url with htaccess)
+        'urlManager' => [
+          'showScriptName' => false,
+          'enablePrettyUrl' => true
+        ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+              'errorAction' => 'site/error',
         ],
     ],
     'params' => $params,
